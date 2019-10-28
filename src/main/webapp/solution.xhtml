@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:composition template="WEB-INF/layout.xhtml">
+    <ui:define name="title">Solution Page</ui:define>
+    <ui:define name="additional_head">
+
+    </ui:define>
+    <ui:define name="content">
+        <div id="point-form" class="point-form">
+            <h:form id="submit-form">
+                <canvas  style="background-image: url('resources/images/area.png')" id="canvas" class="area-image" onclick="coordinaty(event)"/>
+                <p><h:outputLabel id="y_error" for="yValue" value="Enter y value:"/>
+                <br/>
+                <h:inputText maxlength="7" id="yValue" value="#{areaChecker.point.y}" required="true" requiredMessage="Параметр Y не указан.">
+                    <f:validateDoubleRange minimum="-2.99999999" maximum="4.99999999"/>
+                </h:inputText>
+                </p>
+                <p>
+                <h:outputLabel for="rValue" value="Chose r value:"/>
+                <br/>
+                <h:selectOneMenu styleClass="rValue" id="rValue" value="#{areaChecker.point.r}" required="true" name="rValue" requiredMessage="Параметр R не указан.">
+                    <f:selectItem itemValue="1"/>
+                    <f:selectItem itemValue="2"/>
+                    <f:selectItem itemValue="3"/>
+                    <f:selectItem itemValue="4"/>
+                    <f:selectItem itemValue="5"/>
+                    <f:validateDoubleRange minimum="1" maximum="5" />
+                </h:selectOneMenu>
+                </p>
+                <p><h:outputText value="Choose x value:"/><br/>
+                <h:commandLink onclick="return validate()" styleClass="button x_button" value="-4" action="#{areaChecker.doCheck(-4)}" />
+                <h:commandLink onclick="return validate()" styleClass="button x_button" value="-3" action="#{areaChecker.doCheck(-3)}"/>
+                <h:commandLink onclick="return validate()" styleClass="button x_button" value="-2" action="#{areaChecker.doCheck(-2)}"/>
+                <br/>
+                <h:commandLink onclick="return validate()" styleClass="button x_button" value="-1" action="#{areaChecker.doCheck(-1)}"/>
+                <h:commandLink onclick="return validate()" styleClass="button x_button" value="0" action="#{areaChecker.doCheck(0)}"/>
+                <h:commandLink onclick="return validate()" styleClass="button x_button" value="1" action="#{areaChecker.doCheck(1)}"/>
+                <br/>
+                <h:commandLink onclick="return validate()" styleClass="button x_button" value="2" action="#{areaChecker.doCheck(2)}"/>
+                <h:commandLink onclick="return validate()" styleClass="button x_button" value="3" action="#{areaChecker.doCheck(3)}"/>
+                <h:commandLink onclick="return validate()" styleClass="button x_button" value="4" action="#{areaChecker.doCheck(4)}"/>
+                </p>
+                <h:messages styleClass="validate-error"/>
+            </h:form>
+            <h:form  id="hiddenForm">
+                <h:inputText value="#{areaChecker.point.x}" id="xValue11" name="xValue"/>
+                <h:inputText value="#{areaChecker.point.y}" id="yValue11" name="yValue"/>
+                <h:inputText value="#{areaChecker.point.r}" id="rValue11" name="rValue"/>
+                <h:commandLink id="linkonclick" action="#{areaChecker.doCheck}"/>
+            </h:form>
+        </div>
+        <c:if test="${!areaChecker.pointsList.isEmpty()}">
+            <div class="results-table-wrapper">
+                <h:dataTable styleClass="results-table" value="#{areaChecker.pointsList}" var="point">
+                    <h:column>
+                        <f:facet name="header">Значение R</f:facet>
+                        #{point.r}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Значение X</f:facet>
+                        #{point.x}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Значение Y</f:facet>
+                        #{point.y}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Результат</f:facet>
+                        #{point.inArea}
+                    </h:column>
+                </h:dataTable>
+
+            </div>
+        </c:if>
+        <h:outputScript library="js" name="jquery-3.3.1.js"/>
+        #{areaChecker.script}
+        <h:outputScript library="js" name="validation.js"/>
+    </ui:define>
+</ui:composition>
+</html>
